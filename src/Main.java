@@ -1,71 +1,127 @@
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        Scanner sc = new Scanner(System.in);
-
-        System.out.println("Ingrese el nombre:");
-        String nombre = sc.nextLine();
-
-        System.out.println("Ingrese la edad:");
-        int edad = sc.nextInt();
-        sc.nextLine();
-
-        System.out.println("Ingrese la especie:");
-        String especie = sc.nextLine();
-
-        System.out.println("Ingrese el peso:");
-        double peso = sc.nextDouble();
-
-        Mascota mascota = new Mascota(nombre, edad, especie, peso);
+        Scanner teclado = new Scanner(System.in);
+        ArrayList<Mascota> lista = new ArrayList<>();
 
         int opcion;
 
         do {
-            System.out.println("----- MENU -----");
-            System.out.println("1. Mostrar informacion");
-            System.out.println("2. Alimentar");
-            System.out.println("3. Vacunar");
-            System.out.println("4. Cumplir anios");
-            System.out.println("5. Mostrar informacion final y salir");
-            System.out.print("Seleccione una opcion: ");
+            System.out.println("----- MENU LISTA MASCOTAS -----");
+            System.out.println("1. Crear mascota");
+            System.out.println("2. Mostrar todas");
+            System.out.println("3. Buscar por nombre");
+            System.out.println("4. Salir");
+            System.out.print("Seleccione opcion: ");
 
-            opcion = sc.nextInt();
+            opcion = teclado.nextInt();
+            teclado.nextLine();
 
             switch (opcion) {
 
                 case 1:
-                    mascota.mostrarInfo();
+                    System.out.println("Nombre:");
+                    String nombre = teclado.nextLine();
+
+                    System.out.println("Edad:");
+                    int edad = teclado.nextInt();
+                    teclado.nextLine();
+
+                    System.out.println("Especie:");
+                    String especie = teclado.nextLine();
+
+                    System.out.println("Peso:");
+                    double peso = teclado.nextDouble();
+                    teclado.nextLine();
+
+                    Mascota m = new Mascota(nombre, edad, especie, peso);
+                    lista.add(m);
+
+                    System.out.println("Mascota creada.");
                     break;
 
                 case 2:
-                    System.out.println("Ingrese cantidad de alimento:");
-                    double cantidad = sc.nextDouble();
-                    mascota.alimentar(cantidad);
+                    if (lista.isEmpty()) {
+                        System.out.println("No hay mascotas.");
+                    } else {
+                        for (Mascota mascota : lista) {
+                            mascota.mostrarInfo();
+                            System.out.println("-----------------");
+                        }
+                    }
                     break;
 
                 case 3:
-                    mascota.vacunar();
+                    System.out.println("Ingrese nombre a buscar:");
+                    String buscar = teclado.nextLine();
+
+                    Mascota encontrada = null;
+
+                    for (Mascota Mascota : lista) {
+                        if (Mascota.getNombre().equalsIgnoreCase(buscar)) {
+                            encontrada = Mascota;
+                            break;
+                        }
+                    }
+
+                    if (encontrada != null) {
+
+                        int sub;
+
+                        do {
+                            System.out.println("---- SUBMENU ----");
+                            System.out.println("1. Alimentar");
+                            System.out.println("2. Vacunar");
+                            System.out.println("3. Cumplir anios");
+                            System.out.println("4. Volver");
+                            System.out.print("Opcion: ");
+
+                            sub = teclado.nextInt();
+
+                            switch (sub) {
+
+                                case 1:
+                                    System.out.println("Cantidad:");
+                                    double cant = teclado.nextDouble();
+                                    encontrada.alimentar(cant);
+                                    break;
+
+                                case 2:
+                                    encontrada.vacunar();
+                                    break;
+
+                                case 3:
+                                    encontrada.cumplirAnios();
+                                    break;
+
+                                case 4:
+                                    break;
+
+                                default:
+                                    System.out.println("Opcion invalida.");
+                            }
+
+                        } while (sub != 4);
+
+                    } else {
+                        System.out.println("Mascota no encontrada.");
+                    }
+
                     break;
 
                 case 4:
-                    mascota.cumplirAnios();
-                    break;
-
-                case 5:
-                    System.out.println("Informacion final:");
-                    mascota.mostrarInfo();
-                    System.out.println("Saliendo del programa...");
+                    System.out.println("Saliendo...");
                     break;
 
                 default:
                     System.out.println("Opcion invalida.");
             }
 
-        } while (opcion != 5);
+        } while (opcion != 4);
 
-        sc.close();
+        teclado.close();
     }
 }
